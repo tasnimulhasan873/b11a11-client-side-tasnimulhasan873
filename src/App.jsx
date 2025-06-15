@@ -1,16 +1,9 @@
-
-import './App.css'
-
 function App() {
-
-
   return (
-    <>
-     
-      <h1>Vite + React</h1>
-      
-    </>
-  )
+    <div style={{ textAlign: 'center', marginTop: '100px', fontSize: '2rem' }}>
+      Hello, React is working!
+    </div>
+  );
 }
 
-export default App
+export default App;

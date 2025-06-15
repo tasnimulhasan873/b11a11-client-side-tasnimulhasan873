@@ -1,10 +1,68 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import { createBrowserRouter, RouterProvider } from "react-router"; // ✅ Corrected import
 
-createRoot(document.getElementById('root')).render(
+import { HelmetProvider } from "react-helmet-async";
+
+import AuthProvider from "./context/AuthProvider.jsx";
+import PrivateRoute from "./Routes/PrivateRoute.jsx";
+
+// Pages/components
+import Root from "./layout/Root.jsx"; // ✅ You MUST have this file/component
+import Home from "./pages/Home/Home.jsx";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import AvailableFoods from "./pages/AvailableFoods.jsx";
+import AddFood from "./pages/AddFood.jsx";
+import ManageFoods from "./pages/ManageFoods.jsx";
+import MyFoodRequest from "./pages/MyFoodRequest.jsx";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Root />, // ✅ Now Root is defined
+    children: [
+      { index: true, element: <Home /> },
+      { path: "available-foods", element: <AvailableFoods /> },
+      { path: "login", element: <Login /> },
+      { path: "register", element: <Register /> },
+      {
+        path: "add-food",
+        element: (
+          <PrivateRoute>
+            <AddFood />
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "manage-my-foods",
+        element: (
+          <PrivateRoute>
+            <ManageFoods/>
+          </PrivateRoute>
+        ),
+      },
+      {
+        path: "my-food-requests",
+        element: (
+          <PrivateRoute>
+            <MyFoodRequest/>
+          </PrivateRoute>
+        ),
+      },
+      { path: "*", element: <NotFound /> },
+    ],
+  },
+]);
+
+createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <AuthProvider>
+      <HelmetProvider>
+        <RouterProvider router={router} />
+      </HelmetProvider>
+    </AuthProvider>
+  </StrictMode>
+);
