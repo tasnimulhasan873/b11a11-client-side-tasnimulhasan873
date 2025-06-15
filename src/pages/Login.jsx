@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router'; // Corrected import for Link and useNavigate
 import { AuthContext } from '../context/AuthC';
 import Swal from 'sweetalert2';
 
@@ -38,7 +38,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-100 via-white to-green-200 flex items-center justify-center px-4">
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-green-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
         <h2 className="text-3xl font-bold text-center text-green-700 mb-6">Login to Your Account</h2>
 
@@ -107,7 +107,7 @@ const Login = () => {
           Continue with Google
         </button>
 
-        <p className="text-sm text-center mt-6">
+        <p className="text-sm text-center mt-6 text-black">
           Don't have an account?{' '}
           <Link to="/register" className="text-green-600 font-semibold hover:underline">
             Register
@@ -119,4 +119,3 @@ const Login = () => {
 };
 
 export default Login;
-
