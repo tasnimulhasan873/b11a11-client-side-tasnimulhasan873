@@ -1,19 +1,16 @@
-// ✅ Correct order: define 'app' first, then use it
-
 import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCItZ7MbXXR7Hn_F1evjBEDhFgumTh63xs",
-  authDomain: "foodsharing-34cc3.firebaseapp.com",
-  projectId: "foodsharing-34cc3",
-  storageBucket: "foodsharing-34cc3.appspot.com",
-  messagingSenderId: "71387349627",
-  appId: "1:71387349627:web:e63ff5b7434378d36f58de"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
 };
-
-// ✅ Initialize app first
+console.log("API Key:", import.meta.env.VITE_FIREBASE_API_KEY);
+console.log("Firebase config:", firebaseConfig);
 const app = initializeApp(firebaseConfig);
-
-// ✅ Then export auth after 'app' is defined
 export const auth = getAuth(app);
+

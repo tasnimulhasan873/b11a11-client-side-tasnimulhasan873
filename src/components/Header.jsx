@@ -1,8 +1,7 @@
 import { useContext, useState } from "react";
 import { NavLink } from "react-router";
 import { AuthContext } from "../context/AuthC";
-import logo from '../assets/logo.png'
-
+import logo from '../assets/logo.png';
 
 const Header = () => {
   const { user, signoutUser } = useContext(AuthContext);
@@ -17,60 +16,115 @@ const Header = () => {
 
   const navLinks = (
     <>
-      <NavLink to="/" className={({ isActive }) => (isActive ? "font-bold underline" : "")}>Home</NavLink>
-      <NavLink to="/available-foods" className={({ isActive }) => (isActive ? "font-bold underline" : "")}>Available Foods</NavLink>
+      <NavLink
+        to="/"
+        className={({ isActive }) =>
+          isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+        }
+      >
+        Home
+      </NavLink>
+      <NavLink
+        to="/available-foods"
+        className={({ isActive }) =>
+          isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+        }
+      >
+        Available Foods
+      </NavLink>
       {user && (
         <>
-          <NavLink to="/add-food" className={({ isActive }) => (isActive ? "font-bold underline" : "")}>Add Food</NavLink>
-          <NavLink to="/manage-foods" className={({ isActive }) => (isActive ? "font-bold underline" : "")}>Manage My Foods</NavLink>
-          <NavLink to="/my-requests" className={({ isActive }) => (isActive ? "font-bold underline" : "")}>My Food Request</NavLink>
+          <NavLink
+            to="/add-food"
+            className={({ isActive }) =>
+              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+            }
+          >
+            Add Food
+          </NavLink>
+          <NavLink
+            to="/manage-foods"
+            className={({ isActive }) =>
+              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+            }
+          >
+            Manage My Foods
+          </NavLink>
+          <NavLink
+            to="/my-requests"
+            className={({ isActive }) =>
+              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+            }
+          >
+            My Food Requests
+          </NavLink>
         </>
       )}
       {!user && (
         <>
-          <NavLink to="/login" className={({ isActive }) => (isActive ? "font-bold underline" : "")}>Login</NavLink>
-          <NavLink to="/signup" className={({ isActive }) => (isActive ? "font-bold underline" : "")}>Signup</NavLink>
+          <NavLink
+            to="/login"
+            className={({ isActive }) =>
+              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+            }
+          >
+            Login
+          </NavLink>
+          <NavLink
+            to="/register"
+            className={({ isActive }) =>
+              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+            }
+          >
+            Signup
+          </NavLink>
         </>
       )}
     </>
   );
 
   return (
-    <nav className="bg-green-200 p-4 shadow-md">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
-          <img src={logo} alt="Logo" className="w-50 h-15 object-cover" />
-          <span className="text-xl font-bold text-green-800"></span>
+    <nav className="bg-gradient-to-r from-yellow-200 via-orange-100 to-yellow-200 shadow-lg sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
+        {/* Logo + Title */}
+        <div className="flex items-center space-x-3">
+          <img
+            src={logo}
+            alt="FoodShare Logo"
+            className="w-55 h-20 object-cover rounded-full shadow-md"
+          />
+          <h1 className="text-2xl font-extrabold text-orange-700 select-none tracking-wide">
+           
+          </h1>
         </div>
 
-        <div className="md:hidden">
-          <button onClick={() => setMenuOpen(!menuOpen)}>
-            <svg className="w-6 h-6 text-green-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </button>
-        </div>
-
-        <ul className="hidden md:flex space-x-6 items-center text-green-700">
+        {/* Desktop Nav */}
+        <ul className="hidden md:flex space-x-8 text-orange-700 text-lg font-medium items-center">
           {navLinks}
         </ul>
 
+        {/* User Avatar & Logout desktop */}
         {user && (
-          <div className="hidden md:flex items-center space-x-4">
-            <div className="relative group cursor-pointer" onClick={() => setShowLogout(!showLogout)}>
+          <div className="hidden md:flex items-center space-x-4 relative">
+            <div
+              className="cursor-pointer group"
+              onClick={() => setShowLogout(!showLogout)}
+              tabIndex={0}
+              onBlur={() => setShowLogout(false)}
+            >
               <img
                 src={user.photoURL}
-                alt="User"
-                className="w-10 h-10 rounded-full border-2 border-green-700"
+                alt={user.displayName}
+                className="w-11 h-11 rounded-full border-2 border-orange-600 shadow-md"
                 title={user.displayName}
               />
-              <div className="absolute top-12 left-1/2 transform -translate-x-1/2 text-sm bg-white text-gray-800 border rounded px-2 py-1 shadow-md opacity-0 group-hover:opacity-100 transition pointer-events-none">
+              <span className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 bg-orange-200 text-orange-800 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap">
                 {user.displayName}
-              </div>
+              </span>
               {showLogout && (
                 <button
                   onClick={handleLogout}
-                  className="absolute top-1 right-2/3 transform -translate-x-1/2 bg-red-500 text-white px-3 py-1 rounded shadow"
+                  className="absolute top-14 left-1/2 transform -translate-x-1/2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded px-4 py-1 shadow-lg z-10"
                 >
                   Logout
                 </button>
@@ -78,27 +132,69 @@ const Header = () => {
             </div>
           </div>
         )}
+
+        {/* Mobile menu button */}
+        <div className="md:hidden">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            aria-label="Toggle menu"
+            className="text-orange-700 hover:text-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded"
+          >
+            {menuOpen ? (
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg
+                className="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                strokeWidth={3}
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
 
+      {/* Mobile menu */}
       {menuOpen && (
-        <div className="md:hidden mt-4 space-y-2 text-green-800">
-          <ul className="flex flex-col space-y-2">{navLinks}</ul>
+        <div className="md:hidden bg-yellow-50 border-t border-orange-300 shadow-inner px-6 py-4 space-y-4 text-orange-700 font-medium text-lg">
+          <ul className="flex flex-col space-y-3">{navLinks}</ul>
 
           {user && (
-            <div className="mt-2">
-              <div className="flex items-center space-x-2 cursor-pointer" onClick={() => setShowLogout(!showLogout)}>
+            <div className="mt-4 border-t border-orange-300 pt-4">
+              <div
+                className="flex items-center space-x-3 cursor-pointer"
+                onClick={() => setShowLogout(!showLogout)}
+              >
                 <img
                   src={user.photoURL}
-                  alt="User"
-                  className="w-10 h-10 rounded-full border-2 border-green-700"
+                  alt={user.displayName}
+                  className="w-12 h-12 rounded-full border-2 border-orange-600 shadow-md"
                   title={user.displayName}
                 />
-                <span>{user.displayName}</span>
+                <span className="font-semibold">{user.displayName}</span>
               </div>
               {showLogout && (
                 <button
                   onClick={handleLogout}
-                  className="mt-2 bg-red-500 text-white px-3 py-1 rounded shadow"
+                  className="mt-3 w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-semibold shadow-md"
                 >
                   Logout
                 </button>
