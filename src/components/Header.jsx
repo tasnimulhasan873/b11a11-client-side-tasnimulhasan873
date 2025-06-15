@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { NavLink } from "react-router";
 import { AuthContext } from "../context/AuthC";
+import logo from '../assets/logo.png'
 
 
 const Header = () => {
@@ -38,8 +39,8 @@ const Header = () => {
     <nav className="bg-green-200 p-4 shadow-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
-          <img src={''} alt="Logo" className="w-8 h-8 object-cover" />
-          <span className="text-xl font-bold text-green-800">Food Share</span>
+          <img src={logo} alt="Logo" className="w-50 h-15 object-cover" />
+          <span className="text-xl font-bold text-green-800"></span>
         </div>
 
         <div className="md:hidden">
