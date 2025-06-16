@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthC";
+import axios from "axios";
 
 const AddFood = () => {
   const { user } = useContext(AuthContext);
@@ -12,10 +13,9 @@ const AddFood = () => {
   const [pickupLocation, setPickupLocation] = useState("");
   const [expireDateTime, setExpireDateTime] = useState("");
   const [additionalNotes, setAdditionalNotes] = useState("");
-  // NEW: State for food status, initialized to "available"
   const [status, setStatus] = useState("available");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!user) {
@@ -25,7 +25,6 @@ const AddFood = () => {
     }
 
     const newFood = {
-      id: Date.now().toString(), // generate unique id (you can replace with backend id)
       name: foodName,
       image: foodImage,
       quantity: Number(quantity),
@@ -37,14 +36,20 @@ const AddFood = () => {
         email: user.email,
         image: user.photoURL || "",
       },
-      status: status, // Now uses the state variable for status
+      status,
       createdAt: new Date().toISOString(),
     };
 
-    // TODO: Save 'newFood' to backend/database here
-    console.log("New Food Added:", newFood);
-
-    navigate("/available-foods");
+    try {
+      const res = await axios.post(
+        'http://localhost:3000/foods',
+        newFood
+      );
+      console.log("Food saved:", res.data);
+      navigate("/available-foods");
+    } catch (error) {
+      console.error("Error saving food:", error);
+    }
   };
 
   return (
@@ -70,7 +75,7 @@ const AddFood = () => {
                 onChange={(e) => setFoodName(e.target.value)}
                 required
                 placeholder="e.g., Freshly Baked Bread"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-400 transition duration-150 ease-in-out"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               />
             </div>
 
@@ -86,7 +91,7 @@ const AddFood = () => {
                 onChange={(e) => setFoodImage(e.target.value)}
                 required
                 placeholder="e.g., https://example.com/bread.jpg"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-400 transition duration-150 ease-in-out"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               />
             </div>
 
@@ -103,7 +108,7 @@ const AddFood = () => {
                 onChange={(e) => setQuantity(e.target.value)}
                 required
                 placeholder="e.g., 5 servings or 1 dozen"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-400 transition duration-150 ease-in-out"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               />
             </div>
 
@@ -119,7 +124,7 @@ const AddFood = () => {
                 onChange={(e) => setPickupLocation(e.target.value)}
                 required
                 placeholder="e.g., 123 Main St, City, State"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-400 transition duration-150 ease-in-out"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               />
             </div>
 
@@ -149,26 +154,26 @@ const AddFood = () => {
                 onChange={(e) => setAdditionalNotes(e.target.value)}
                 rows={4}
                 placeholder="e.g., Contains nuts, best consumed within 24 hours, etc."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-400 transition duration-150 ease-in-out"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               ></textarea>
             </div>
 
-            {/* Food Status - NOW VISIBLE AND SELECTABLE */}
+            {/* Food Status */}
             <div>
               <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
                 Food Status
               </label>
               <select
                 id="status"
-                value={status} // Binds the select's value to the 'status' state
-                onChange={(e) => setStatus(e.target.value)} // Updates state when selection changes
+                value={status}
+                onChange={(e) => setStatus(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 transition duration-150 ease-in-out"
               >
                 <option value="available">Available</option>
               </select>
             </div>
 
-            {/* Donor Info (readonly) */}
+            {/* Donor Info */}
             <div className="bg-green-50 p-5 rounded-xl border border-green-200 text-green-800 shadow-inner">
               <p className="text-lg font-semibold mb-2">Your Donor Information:</p>
               <div className="flex items-center space-x-4">
