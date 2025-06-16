@@ -3,13 +3,13 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 
 const AvailableFoods = () => {
-  const [foods, setFoods] = useState([]); // all foods from backend
-  const [filteredFoods, setFilteredFoods] = useState([]); // foods after search/sort
+  const [foods, setFoods] = useState([]);
+  const [filteredFoods, setFilteredFoods] = useState([]); 
   const [sortOrder, setSortOrder] = useState('asc');
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
 
-  // Fetch foods from backend with sorting
+  
   const fetchFoods = async (order) => {
     try {
       const res = await axios.get(`http://localhost:3000/available-foods?sort=${order}`);
