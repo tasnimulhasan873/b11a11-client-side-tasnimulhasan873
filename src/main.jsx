@@ -15,6 +15,7 @@ import AvailableFoods from "./pages/AvailableFoods.jsx";
 import AddFood from "./pages/AddFood.jsx";
 import ManageFoods from "./pages/ManageFoods.jsx";
 import MyFoodRequest from "./pages/MyFoodRequest.jsx";
+import FoodDetails from "./pages/FoodDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,8 @@ const router = createBrowserRouter([
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
       { path: "/available-foods", element: <AvailableFoods /> },
+      { path:"/food-details/:id", element:<FoodDetails />},
+
       {
         path: "add-food",
         element: (
