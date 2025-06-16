@@ -51,7 +51,7 @@ const Header = () => {
             Manage My Foods
           </NavLink>
           <NavLink
-            to="/my-requests"
+            to="/requested-foods"
             className={({ isActive }) =>
               isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
             }
