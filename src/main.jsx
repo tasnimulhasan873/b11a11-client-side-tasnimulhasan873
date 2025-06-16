@@ -2,14 +2,11 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import "./index.css";
 import { createBrowserRouter, RouterProvider } from "react-router"; // ✅ Corrected import
-
 import { HelmetProvider } from "react-helmet-async";
-
 import AuthProvider from "./context/AuthProvider.jsx";
 import PrivateRoute from "./Routes/PrivateRoute.jsx";
 
-// Pages/components
-import Root from "./layout/Root.jsx"; // ✅ You MUST have this file/component
+import Root from "./layout/Root.jsx"; 
 import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
@@ -25,9 +22,9 @@ const router = createBrowserRouter([
     element: <Root />, // ✅ Now Root is defined
     children: [
       { index: true, element: <Home /> },
-      { path: "available-foods", element: <AvailableFoods /> },
       { path: "login", element: <Login /> },
       { path: "register", element: <Register /> },
+      { path: "/available-foods", element: <AvailableFoods /> },
       {
         path: "add-food",
         element: (
