@@ -3,6 +3,11 @@ import { useNavigate } from "react-router";
 import { AuthContext } from "../context/AuthC";
 import axios from "axios";
 
+import { Input } from "../components/ui/Input";
+import { Textarea } from "../components/ui/Textarea";
+import { Button } from "../components/ui/Button";
+import { Label } from "../components/ui/label";
+
 const AddFood = () => {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
@@ -42,7 +47,7 @@ const AddFood = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:3000/foods',
+        "https://a11-food-sharing-server-nine.vercel.app/foods",
         newFood
       );
       console.log("Food saved:", res.data);
@@ -65,42 +70,34 @@ const AddFood = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Food Name */}
             <div>
-              <label htmlFor="foodName" className="block text-sm font-medium text-gray-700 mb-1">
-                Food Name
-              </label>
-              <input
+              <Label htmlFor="foodName">Food Name</Label>
+              <Input
                 id="foodName"
                 type="text"
                 value={foodName}
                 onChange={(e) => setFoodName(e.target.value)}
                 required
                 placeholder="e.g., Freshly Baked Bread"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               />
             </div>
 
             {/* Food Image URL */}
             <div>
-              <label htmlFor="foodImage" className="block text-sm font-medium text-gray-700 mb-1">
-                Food Image URL
-              </label>
-              <input
+              <Label htmlFor="foodImage">Food Image URL</Label>
+              <Input
                 id="foodImage"
                 type="url"
                 value={foodImage}
                 onChange={(e) => setFoodImage(e.target.value)}
                 required
                 placeholder="e.g., https://example.com/bread.jpg"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               />
             </div>
 
             {/* Food Quantity */}
             <div>
-              <label htmlFor="quantity" className="block text-sm font-medium text-gray-700 mb-1">
-                Food Quantity
-              </label>
-              <input
+              <Label htmlFor="quantity">Food Quantity</Label>
+              <Input
                 id="quantity"
                 type="number"
                 min="1"
@@ -108,61 +105,51 @@ const AddFood = () => {
                 onChange={(e) => setQuantity(e.target.value)}
                 required
                 placeholder="e.g., 5 servings or 1 dozen"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               />
             </div>
 
             {/* Pickup Location */}
             <div>
-              <label htmlFor="pickupLocation" className="block text-sm font-medium text-gray-700 mb-1">
-                Pickup Location
-              </label>
-              <input
+              <Label htmlFor="pickupLocation">Pickup Location</Label>
+              <Input
                 id="pickupLocation"
                 type="text"
                 value={pickupLocation}
                 onChange={(e) => setPickupLocation(e.target.value)}
                 required
                 placeholder="e.g., 123 Main St, City, State"
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
               />
             </div>
 
-            {/* Expired Date/Time */}
+            {/* Expiration Date/Time */}
             <div>
-              <label htmlFor="expireDateTime" className="block text-sm font-medium text-gray-700 mb-1">
-                Expiration Date/Time
-              </label>
-              <input
+              <Label htmlFor="expireDateTime">Expiration Date/Time</Label>
+              <Input
                 id="expireDateTime"
                 type="datetime-local"
                 value={expireDateTime}
                 onChange={(e) => setExpireDateTime(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 transition duration-150 ease-in-out"
               />
             </div>
 
             {/* Additional Notes */}
             <div>
-              <label htmlFor="additionalNotes" className="block text-sm font-medium text-gray-700 mb-1">
+              <Label htmlFor="additionalNotes">
                 Additional Notes (Optional)
-              </label>
-              <textarea
+              </Label>
+              <Textarea
                 id="additionalNotes"
                 value={additionalNotes}
                 onChange={(e) => setAdditionalNotes(e.target.value)}
                 rows={4}
                 placeholder="e.g., Contains nuts, best consumed within 24 hours, etc."
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-600 transition duration-150 ease-in-out"
-              ></textarea>
+              />
             </div>
 
             {/* Food Status */}
             <div>
-              <label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
-                Food Status
-              </label>
+              <Label htmlFor="status">Food Status</Label>
               <select
                 id="status"
                 value={status}
@@ -175,7 +162,9 @@ const AddFood = () => {
 
             {/* Donor Info */}
             <div className="bg-green-50 p-5 rounded-xl border border-green-200 text-green-800 shadow-inner">
-              <p className="text-lg font-semibold mb-2">Your Donor Information:</p>
+              <p className="text-lg font-semibold mb-2">
+                Your Donor Information:
+              </p>
               <div className="flex items-center space-x-4">
                 {user?.photoURL && (
                   <img
@@ -186,7 +175,8 @@ const AddFood = () => {
                 )}
                 <div>
                   <p className="text-gray-900 font-medium">
-                    <span className="font-bold">Name:</span> {user?.displayName || "Anonymous"}
+                    <span className="font-bold">Name:</span>{" "}
+                    {user?.displayName || "Anonymous"}
                   </p>
                   <p className="text-gray-700 text-sm">
                     <span className="font-bold">Email:</span> {user?.email}
@@ -196,12 +186,7 @@ const AddFood = () => {
             </div>
 
             {/* Submit Button */}
-            <button
-              type="submit"
-              className="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-lg font-semibold text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 transition duration-200 ease-in-out transform hover:scale-105"
-            >
-              Add Food for Sharing
-            </button>
+            <Button type="submit">Add Food for Sharing</Button>
           </form>
         </div>
       </div>

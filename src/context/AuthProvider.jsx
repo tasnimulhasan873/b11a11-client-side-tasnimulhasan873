@@ -8,7 +8,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
   signInWithPopup,
-
+updateProfile,
 
 } from 'firebase/auth';
 import { auth } from '../firebase.init';
@@ -32,10 +32,10 @@ const AuthProvider = ({ children }) => {
   };
 
   // Logout user
-  const signoutUser = () => {
-    setLoading(true);
-    return signOut(auth);
-  };
+const signoutUser = () => {
+  setLoading(true);
+  return signOut(auth);
+};
 
 
   // Google Sign-In
@@ -46,7 +46,13 @@ const AuthProvider = ({ children }) => {
   };
 
   // Update user profile
- 
+ const updateUserProfile = (name, photoURL) => {
+  if (!auth.currentUser) return Promise.reject("No user is logged in");
+  return updateProfile(auth.currentUser, {
+    displayName: name,
+    photoURL: photoURL,
+  });
+};
 
   // Observe auth state
   useEffect(() => {
@@ -65,8 +71,7 @@ const AuthProvider = ({ children }) => {
     loginUser,
     signoutUser,
     googleSignin,
-   
-    
+   updateUserProfile,
   };
 
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router'; // 
+import { Link, useNavigate } from 'react-router'; 
 import Swal from 'sweetalert2';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { AuthContext } from '../context/AuthC';
@@ -108,12 +108,14 @@ const Register = () => {
                 onChange={handleChange}
                 placeholder="Create a strong password"
                 required
-                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg pr-10 focus:outline-none focus:ring-2 focus:ring-lime-400"
+                className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg pr-10 focus:outline-none focus:ring-2 focus:ring-lime-400
+                           text-gray-900 text-base font-normal leading-relaxed"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-2.5 text-gray-500"
+                className="absolute right-3 top-2.5 text-gray-500 hover:text-gray-700"
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
               >
                 {showPassword ? <FaEyeSlash /> : <FaEye />}
               </button>
@@ -172,10 +174,10 @@ const InputField = ({ label, type = 'text', name, value, onChange }) => (
       value={value}
       onChange={onChange}
       required
-      className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400"
+      className="mt-1 w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-lime-400
+                 text-gray-900 text-base font-normal leading-relaxed"
     />
   </div>
 );
 
 export default Register;
-

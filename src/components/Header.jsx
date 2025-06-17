@@ -1,25 +1,42 @@
-import { useContext, useState } from "react";
-import { NavLink } from "react-router";
+import { useContext, useState, useEffect, useRef } from "react";
+import { NavLink } from "react-router-dom";
 import { AuthContext } from "../context/AuthC";
-import logo from '../assets/logo.png';
+import logo from "../assets/logo.png";
 
 const Header = () => {
   const { user, signoutUser } = useContext(AuthContext);
   const [showLogout, setShowLogout] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
-  const handleLogout = () => {
-    signoutUser()
-      .then(() => setShowLogout(false))
-      .catch((error) => console.error(error));
+  const handleLogout = async () => {
+    try {
+      await signoutUser();
+      setShowLogout(false);
+      setMenuOpen(false);
+    } catch (err) {
+      console.error("Logout failed:", err);
+    }
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setShowLogout(false);
+      }
+    };
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
+  }, []);
 
   const navLinks = (
     <>
       <NavLink
         to="/"
         className={({ isActive }) =>
-          isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+          isActive
+            ? "font-bold text-orange-600 underline"
+            : "hover:text-orange-500"
         }
       >
         Home
@@ -27,7 +44,9 @@ const Header = () => {
       <NavLink
         to="/available-foods"
         className={({ isActive }) =>
-          isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+          isActive
+            ? "font-bold text-orange-600 underline"
+            : "hover:text-orange-500"
         }
       >
         Available Foods
@@ -37,7 +56,9 @@ const Header = () => {
           <NavLink
             to="/add-food"
             className={({ isActive }) =>
-              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+              isActive
+                ? "font-bold text-orange-600 underline"
+                : "hover:text-orange-500"
             }
           >
             Add Food
@@ -45,7 +66,9 @@ const Header = () => {
           <NavLink
             to="/manage-foods"
             className={({ isActive }) =>
-              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+              isActive
+                ? "font-bold text-orange-600 underline"
+                : "hover:text-orange-500"
             }
           >
             Manage My Foods
@@ -53,10 +76,12 @@ const Header = () => {
           <NavLink
             to="/requested-foods"
             className={({ isActive }) =>
-              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+              isActive
+                ? "font-bold text-orange-600 underline"
+                : "hover:text-orange-500"
             }
           >
-            My Food Requests
+            My Requests
           </NavLink>
         </>
       )}
@@ -65,7 +90,9 @@ const Header = () => {
           <NavLink
             to="/login"
             className={({ isActive }) =>
-              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+              isActive
+                ? "font-bold text-orange-600 underline"
+                : "hover:text-orange-500"
             }
           >
             Login
@@ -73,7 +100,9 @@ const Header = () => {
           <NavLink
             to="/register"
             className={({ isActive }) =>
-              isActive ? "font-semibold underline text-orange-600" : "hover:text-orange-500 transition"
+              isActive
+                ? "font-bold text-orange-600 underline"
+                : "hover:text-orange-500"
             }
           >
             Signup
@@ -84,123 +113,90 @@ const Header = () => {
   );
 
   return (
-    <nav className="bg-gradient-to-r from-yellow-200 via-orange-100 to-yellow-200 shadow-lg sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 md:px-8 py-3 flex items-center justify-between">
-        {/* Logo + Title */}
-        <div className="flex items-center space-x-3">
+    <nav className="bg-gradient-to-r from-yellow-200 via-orange-100 to-yellow-200 shadow sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
+        {/* Logo Section */}
+        <div className="flex items-center gap-3">
           <img
             src={logo}
-            alt="FoodShare Logo"
-            className="w-55 h-20 object-cover rounded-full shadow-md"
+            alt="Logo"
+            className="w-45 h-20 rounded-full shadow"
           />
-          <h1 className="text-2xl font-extrabold text-orange-700 select-none tracking-wide">
-           
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-orange-700">
+            
           </h1>
         </div>
 
         {/* Desktop Nav */}
-        <ul className="hidden md:flex space-x-8 text-orange-700 text-lg font-medium items-center">
+        <ul className="hidden md:flex gap-6 items-center text-orange-700 text-lg font-semibold">
           {navLinks}
         </ul>
 
-        {/* User Avatar & Logout desktop */}
-        {user && (
-          <div className="hidden md:flex items-center space-x-4 relative">
-            <div
-              className="cursor-pointer group"
-              onClick={() => setShowLogout(!showLogout)}
-              tabIndex={0}
-              onBlur={() => setShowLogout(false)}
-            >
+        {/* Right Side */}
+        <div className="relative flex items-center gap-3" ref={dropdownRef}>
+          {user && (
+            <>
               <img
                 src={user.photoURL}
-                alt={user.displayName}
-                className="w-11 h-11 rounded-full border-2 border-orange-600 shadow-md"
-                title={user.displayName}
+                alt="User"
+                onClick={() => setShowLogout(!showLogout)}
+                className="w-10 h-10 rounded-full border-2 border-orange-500 cursor-pointer"
               />
-              <span className="absolute -bottom-7 left-1/2 transform -translate-x-1/2 bg-orange-200 text-orange-800 text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 transition pointer-events-none whitespace-nowrap">
-                {user.displayName}
-              </span>
               {showLogout && (
                 <button
                   onClick={handleLogout}
-                  className="absolute top-14 left-1/2 transform -translate-x-1/2 bg-red-500 hover:bg-red-600 text-white text-sm font-semibold rounded px-4 py-1 shadow-lg z-10"
+                  className="absolute top-12 right-0 bg-red-500 hover:bg-red-600 text-white text-sm px-4 py-1 rounded shadow"
                 >
                   Logout
                 </button>
               )}
-            </div>
-          </div>
-        )}
+            </>
+          )}
 
-        {/* Mobile menu button */}
-        <div className="md:hidden">
+          {/* Hamburger for mobile */}
           <button
+            className="md:hidden text-orange-700"
             onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle menu"
-            className="text-orange-700 hover:text-orange-800 focus:outline-none focus:ring-2 focus:ring-orange-400 rounded"
           >
             {menuOpen ? (
               <svg
-                className="w-8 h-8"
+                className="w-6 h-6"
+                viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={3}
-                strokeLinecap="round"
-                strokeLinejoin="round"
               >
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
+                <path
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
               </svg>
             ) : (
               <svg
-                className="w-8 h-8"
+                className="w-6 h-6"
+                viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                viewBox="0 0 24 24"
-                strokeWidth={3}
-                strokeLinecap="round"
-                strokeLinejoin="round"
               >
-                <line x1="3" y1="6" x2="21" y2="6" />
-                <line x1="3" y1="12" x2="21" y2="12" />
-                <line x1="3" y1="18" x2="21" y2="18" />
+                <path
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
               </svg>
             )}
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Nav */}
       {menuOpen && (
-        <div className="md:hidden bg-yellow-50 border-t border-orange-300 shadow-inner px-6 py-4 space-y-4 text-orange-700 font-medium text-lg">
-          <ul className="flex flex-col space-y-3">{navLinks}</ul>
-
-          {user && (
-            <div className="mt-4 border-t border-orange-300 pt-4">
-              <div
-                className="flex items-center space-x-3 cursor-pointer"
-                onClick={() => setShowLogout(!showLogout)}
-              >
-                <img
-                  src={user.photoURL}
-                  alt={user.displayName}
-                  className="w-12 h-12 rounded-full border-2 border-orange-600 shadow-md"
-                  title={user.displayName}
-                />
-                <span className="font-semibold">{user.displayName}</span>
-              </div>
-              {showLogout && (
-                <button
-                  onClick={handleLogout}
-                  className="mt-3 w-full bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg font-semibold shadow-md"
-                >
-                  Logout
-                </button>
-              )}
-            </div>
-          )}
+        <div className="md:hidden bg-yellow-50 border-t border-orange-300 px-4 py-3">
+          <ul className="flex flex-col space-y-3 text-orange-700 text-lg font-semibold">
+            {navLinks}
+          </ul>
         </div>
       )}
     </nav>
