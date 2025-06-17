@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { AuthContext } from './AuthC';
+import axios from "axios";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -59,6 +60,18 @@ const signoutUser = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
+
+   
+    if (currentUser?.email) {
+      axios.post('https://a11-food-sharing-server-nine.vercel.app/jwt', {
+        email: currentUser.email
+      }, {
+        withCredentials: true,
+      })
+      .then(res => console.log("JWT Set", res.data))
+      .catch(error => console.log("JWT Error", error));
+    }
+  
     });
 
     return () => unsubscribe();

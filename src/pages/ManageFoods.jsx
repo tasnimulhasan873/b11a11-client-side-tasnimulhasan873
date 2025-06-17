@@ -1,128 +1,119 @@
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
+import axiosSecure from "../axiosSecure";
 import { AuthContext } from "../context/AuthC";
-import PulsingDotLoader from '../components/PulsingDotLoader'; 
+
 
 const ManageFoods = () => {
   const { user } = useContext(AuthContext);
   const [foods, setFoods] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [editingFood, setEditingFood] = useState(null); // Modal state
-  const [updating, setUpdating] = useState(false);
-
-  const fetchUserFoods = async () => {
-    setLoading(true); // Start loading before fetch
-    try {
-      const res = await axios.get(
-        `https://a11-food-sharing-server-nine.vercel.app/manage-foods?email=${user.email}`
-      );
-      setFoods(res.data);
-    } catch (error) {
-      console.error("Error fetching foods:", error);
-      // Optionally show an error message to the user
-    } finally {
-      setLoading(false); // End loading after fetch completes
-    }
-  };
+  const [editingFood, setEditingFood] = useState(null);
 
   useEffect(() => {
     if (user?.email) {
-      fetchUserFoods();
+      axiosSecure
+        .get(`/manage-foods?email=${user.email}`)
+        .then((res) => setFoods(res.data))
+        .catch((error) => {
+          console.error("Error fetching foods:", error);
+        });
     }
   }, [user?.email]);
 
-  const handleDelete = async (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this food item?"
-    );
-    if (!confirmDelete) return;
-
-    try {
-      await axios.delete(
-        `https://a11-food-sharing-server-nine.vercel.app/manage-foods/${id}`
-      );
-      setFoods((prev) => prev.filter((food) => food._id !== id));
-      alert("Food deleted successfully.");
-    } catch (error) {
-      console.error("Error deleting food:", error);
-      alert("Failed to delete food.");
-    }
+  const formatDateTime = (dateTimeStr) => {
+    const date = new Date(dateTimeStr);
+    if (isNaN(date)) return dateTimeStr;
+    return date.toLocaleString();
   };
 
-  const handleUpdateSubmit = async (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    setUpdating(true);
     const form = e.target;
+
     const updatedFood = {
-      name: form.name.value,
-      quantity: form.quantity.value,
+      foodName: form.foodName.value,
+      foodQuantity: form.foodQuantity.value,
       pickupLocation: form.pickupLocation.value,
-      expireDateTime: form.expireDateTime.value,
-      // Ensure image and additionalNotes are also sent if editable in the form
-      // image: editingFood.image, // Assuming image is not updated in this form
-      // additionalNotes: editingFood.additionalNotes, // Assuming notes are not updated
+      expiredDateTime: form.expiredDateTime.value,
+      additionalNotes: form.additionalNotes.value,
     };
 
     try {
-      await axios.put(
-        `https://a11-food-sharing-server-nine.vercel.app/manage-foods/${editingFood._id}`,
+      const response = await axiosSecure.put(
+        `/manage-foods/${editingFood._id}`,
         updatedFood
       );
-      alert("Food updated successfully!");
-      setEditingFood(null); // Close modal
-      fetchUserFoods(); // Refresh list to show updated data
+
+      if (response.data.modifiedCount > 0) {
+        alert("Food updated successfully");
+
+        const updatedFoods = foods.map((food) =>
+          food._id === editingFood._id ? { ...food, ...updatedFood } : food
+        );
+        setFoods(updatedFoods);
+        setEditingFood(null);
+      }
     } catch (error) {
-      console.error("Update failed", error);
-      alert("Failed to update food. Please try again.");
-    } finally {
-      setUpdating(false);
+      console.error("Error updating food:", error);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    const confirm = window.confirm("Are you sure you want to delete?");
+    if (!confirm) return;
+
+    try {
+      const response = await axiosSecure.delete(`/manage-foods/${id}`);
+
+      if (response.data.deletedCount > 0) {
+        alert("Food deleted successfully");
+        setFoods(foods.filter((food) => food._id !== id));
+      }
+    } catch (error) {
+      console.error("Error deleting food:", error);
     }
   };
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-12 sm:px-6 lg:px-8">
-      <h2 className="text-4xl font-extrabold mb-8 text-center text-green-700">
-        Manage My Foods
-      </h2>
+    <div className="p-4 text-gray-800 dark:text-gray-200 min-h-screen">
+      <h2 className="text-3xl font-bold mb-4 text-center">Manage My Foods</h2>
 
-      {loading ? (
-        // Pulsing Dot Loader integrated here
-        <PulsingDotLoader />
-      ) : foods.length === 0 ? (
-        <p className="text-center text-xl text-gray-600 py-10 border border-dashed border-gray-300 rounded-lg p-6">
-          You haven't added any food items yet. Start sharing to reduce waste!
+      {foods.length === 0 ? (
+        <p className="text-gray-500 dark:text-gray-400 text-center">
+          No foods available to manage.
         </p>
       ) : (
-        <div className="overflow-x-auto bg-white rounded-2xl shadow-xl border border-green-100">
-          <table className="min-w-full divide-y divide-gray-200 text-gray-800">
-            <thead className="bg-green-700 text-white">
-              <tr>
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider rounded-tl-2xl">Food Name</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Quantity</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Pickup Location</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider">Expire Date</th>
-                <th className="px-6 py-4 text-left text-sm font-semibold uppercase tracking-wider rounded-tr-2xl">Actions</th>
+        <div className="overflow-x-auto">
+          <table className="table w-full border text-sm md:text-base">
+            <thead>
+              <tr className="bg-green-700 text-white">
+                <th>#</th>
+                <th>Food Name</th>
+                <th>Quantity</th>
+                <th>Pickup Location</th>
+                <th>Expire Date</th>
+                <th>Notes</th>
+                <th>Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
-              {foods.map((food) => (
-                <tr key={food._id} className="hover:bg-green-50 transition duration-150 ease-in-out">
-                  <td className="px-6 py-4 whitespace-nowrap text-lg font-medium text-gray-900">{food.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-700">{food.quantity}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-lg text-gray-700">{food.pickupLocation}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-lg text-red-600 font-medium">
-                    {new Date(food.expireDateTime).toLocaleString()}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap space-x-3">
+            <tbody>
+              {foods.map((food, idx) => (
+                <tr key={food._id} className="border-b">
+                  <td>{idx + 1}</td>
+                  <td>{food.foodName}</td>
+                  <td>{food.foodQuantity}</td>
+                  <td>{food.pickupLocation}</td>
+                  <td>{formatDateTime(food.expiredDateTime)}</td>
+                  <td>{food.additionalNotes}</td>
+                  <td>
                     <button
                       onClick={() => setEditingFood(food)}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-yellow-500 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200"
+                      className="btn btn-sm btn-warning mr-2"
                     >
-                      Update
+                      Edit
                     </button>
                     <button
                       onClick={() => handleDelete(food._id)}
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+                      className="btn btn-sm btn-error"
                     >
                       Delete
                     </button>
@@ -134,114 +125,70 @@ const ManageFoods = () => {
         </div>
       )}
 
-      {/* Update Modal */}
+      {/* Edit Modal */}
       {editingFood && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
-          onClick={() => setEditingFood(null)} // Close modal on outside click
-        >
-          <div
-            className="bg-white p-8 rounded-2xl shadow-2xl w-full max-w-lg relative text-gray-800 transform scale-100 animate-scaleIn"
-            onClick={(e) => e.stopPropagation()} // Prevent modal close on inside click
+        <div className="fixed top-0 left-0 right-0 bottom-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <form
+            onSubmit={handleUpdate}
+            className="bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-6 rounded-lg w-[90%] max-w-md"
           >
-            {/* Close button for modal */}
-            <button
-              onClick={() => setEditingFood(null)}
-              className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200"
-              aria-label="Close modal"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-7 w-7"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth="2"
+            <h3 className="text-xl font-semibold mb-4">Edit Food</h3>
+
+            <input
+              type="text"
+              name="foodName"
+              defaultValue={editingFood.foodName}
+              className="input input-bordered w-full mb-3 text-gray-800 dark:text-gray-100"
+              placeholder="Food Name"
+              required
+            />
+
+            <input
+              type="text"
+              name="foodQuantity"
+              defaultValue={editingFood.foodQuantity}
+              className="input input-bordered w-full mb-3 text-gray-800 dark:text-gray-100"
+              placeholder="Quantity"
+              required
+            />
+
+            <input
+              type="text"
+              name="pickupLocation"
+              defaultValue={editingFood.pickupLocation}
+              className="input input-bordered w-full mb-3 text-gray-800 dark:text-gray-100"
+              placeholder="Pickup Location"
+              required
+            />
+
+            <input
+              type="datetime-local"
+              name="expiredDateTime"
+              defaultValue={editingFood.expiredDateTime}
+              className="input input-bordered w-full mb-3 text-gray-800 dark:text-gray-100"
+              required
+            />
+
+            <textarea
+              name="additionalNotes"
+              defaultValue={editingFood.additionalNotes}
+              className="textarea textarea-bordered w-full mb-3 text-gray-800 dark:text-gray-100"
+              placeholder="Additional Notes"
+            ></textarea>
+
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setEditingFood(null)}
+                className="btn btn-outline"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            <h3 className="text-3xl font-bold mb-6 text-green-700 text-center">
-              Update Food Item
-            </h3>
-            <form onSubmit={handleUpdateSubmit} className="space-y-5">
-              <div>
-                <label htmlFor="foodName" className="block text-sm font-medium text-gray-700 mb-1">Food Name</label>
-                <input
-                  type="text"
-                  id="foodName"
-                  name="name"
-                  defaultValue={editingFood.name}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-400 transition duration-200"
-                  required
-                  placeholder="e.g., Fresh Apples"
-                />
-              </div>
-              <div>
-                <label htmlFor="foodQuantity" className="block text-sm font-medium text-gray-700 mb-1">Quantity</label>
-                <input
-                  type="number" // Changed to number type for quantity
-                  id="foodQuantity"
-                  name="quantity"
-                  defaultValue={editingFood.quantity}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-400 transition duration-200"
-                  required
-                  placeholder="e.g., 5 kg"
-                  min="1" // Ensure quantity is at least 1
-                />
-              </div>
-              <div>
-                <label htmlFor="pickupLocation" className="block text-sm font-medium text-gray-700 mb-1">Pickup Location</label>
-                <input
-                  type="text"
-                  id="pickupLocation"
-                  name="pickupLocation"
-                  defaultValue={editingFood.pickupLocation}
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 placeholder-gray-400 transition duration-200"
-                  required
-                  placeholder="e.g., Community Hall, Main Street"
-                />
-              </div>
-              <div>
-                <label htmlFor="expireDateTime" className="block text-sm font-medium text-gray-700 mb-1">Expiration Date/Time</label>
-                <input
-                  type="datetime-local"
-                  id="expireDateTime"
-                  name="expireDateTime"
-                  defaultValue={
-                    editingFood.expireDateTime
-                      ? new Date(editingFood.expireDateTime).toISOString().slice(0, 16)
-                      : ""
-                  }
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:ring-green-500 focus:border-green-500 text-gray-900 transition duration-200"
-                  required
-                />
-              </div>
-
-              <div className="flex justify-end space-x-3 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setEditingFood(null)}
-                  className="px-6 py-3 bg-gray-200 text-gray-700 font-medium rounded-lg hover:bg-gray-300 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  disabled={updating}
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={updating}
-                  className={`px-6 py-3 rounded-lg font-medium transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                    updating
-                      ? "bg-green-400 cursor-not-allowed text-gray-200"
-                      : "bg-green-600 hover:bg-green-700 text-white focus:ring-green-500"
-                  }`}
-                >
-                  {updating ? "Updating..." : "Update Food"}
-                </button>
-              </div>
-            </form>
-          </div>
+                Cancel
+              </button>
+              <button type="submit" className="btn btn-primary">
+                Save
+              </button>
+            </div>
+          </form>
         </div>
       )}
     </div>
