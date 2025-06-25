@@ -47,3 +47,10 @@ A community-driven platform that helps reduce food waste by allowing users to sh
 "cors"
 "dotenv"
 
+##  Run Locally
+Cliend side: 
+git clone https://github.com/your-username/food-sharing-client.git
+cd food-sharing-client
+npm install
+npm run dev
+
