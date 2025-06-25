@@ -1,39 +1,81 @@
-# 🍱 Food Sharing Website
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🍱 Food Sharing Website</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      padding: 2rem;
+      background-color: #f9f9f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    a {
+      color: #e74c3c;
+      text-decoration: none;
+    }
+    code {
+      background: #f4f4f4;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: Consolas, monospace;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      overflow-x: auto;
+      border-radius: 5px;
+    }
+    hr {
+      border: none;
+      border-top: 2px solid #ccc;
+      margin: 2rem 0;
+    }
+  </style>
+</head>
+<body>
 
-A community-driven platform that helps reduce food waste by allowing users to share and request surplus food within their local area.
+  <h1>🍱 Food Sharing Website</h1>
+  <p>A community-driven platform that helps reduce food waste by allowing users to share and request surplus food within their local area.</p>
 
----
+  <hr>
 
-## 🌐 Live Demo  
-👉 [Click here to visit the live site](https://foodsharing-34cc3.web.app/)
+  <h2>🌐 Live Demo</h2>
+  <p>👉 <a href="https://foodsharing-34cc3.web.app/" target="_blank">Click here to visit the live site</a></p>
 
+  <hr>
 
-## 🛠️ Tech Stack
+  <h2>🛠️ Tech Stack</h2>
+  <ul>
+    <li><strong>Frontend:</strong> React, Tailwind CSS, DaisyUI, React Router DOM</li>
+    <li><strong>State & Data:</strong> TanStack React Query, Axios</li>
+    <li><strong>Authentication:</strong> Firebase Authentication</li>
+    <li><strong>Backend:</strong> Node.js, Express</li>
+    <li><strong>Database:</strong> MongoDB (Mongoose ODM)</li>
+  </ul>
 
-- **Frontend:** React, Tailwind CSS, DaisyUI, React Router DOM
-- **State & Data:** TanStack React Query, Axios
-- **Authentication:** Firebase Authentication
-- **Backend:** Node.js, Express
-- **Database:** MongoDB (Mongoose ODM)
+  <hr>
 
----
+  <h2>🔑 Key Features</h2>
+  <ul>
+    <li>🔍 Browse all food items with search & sort by expiration date</li>
+    <li>📝 Detailed view for each food item</li>
+    <li>🔐 Protected routes and Firebase user authentication</li>
+    <li>➕ Add food with quantity, expiry, location, and notes</li>
+    <li>📩 Request food via modal form</li>
+    <li>📋 Manage personal listings and requests</li>
+    <li>📱 Fully responsive UI with modern design</li>
+    <li>⚡ Fast and efficient data fetching with React Query</li>
+  </ul>
 
-## 🔑 Key Features
+  <hr>
 
-- 🔍 Browse all food items with search & sort by expiration date  
-- 📝 Detailed view for each food item  
-- 🔐 Protected routes and Firebase user authentication  
-- ➕ Add food with quantity, expiry, location, and notes  
-- 📩 Request food via modal form  
-- 📋 Manage personal listings and requests  
-- 📱 Fully responsive UI with modern design  
-- ⚡ Fast and efficient data fetching with React Query  
-
----
-
-## 📦 Major Dependencies
-
-```bash
+  <h2>📦 Major Dependencies</h2>
+  <pre><code>
 "react"
 "react-router-dom"
 "axios"
@@ -46,29 +88,38 @@ A community-driven platform that helps reduce food waste by allowing users to sh
 "mongoose"
 "cors"
 "dotenv"
----
----
+  </code></pre>
 
-## Run Locally
-Client side: 
+  <hr>
+
+  <h2>🚀 Run Locally</h2>
+  <p><strong>Client Side:</strong></p>
+  <pre><code>
 git clone https://github.com/your-username/food-sharing-client.git
 cd food-sharing-client
 npm install
 npm run dev
+  </code></pre>
 
-Server:
+  <p><strong>Server:</strong></p>
+  <pre><code>
 git clone https://github.com/your-username/food-sharing-server.git
 cd food-sharing-server
 npm install
 npm start
+  </code></pre>
 
----
+  <hr>
 
-## 🔗 Relevant Links
-🔴 Live Website: https://foodsharing-34cc3.web.app
+  <h2>🔗 Relevant Links</h2>
+  <ul>
+    <li>🔴 <strong>Live Website:</strong> <a href="https://foodsharing-34cc3.web.app" target="_blank">https://foodsharing-34cc3.web.app</a></li>
+    <li>💻 <strong>Frontend GitHub Repo:</strong> <a href="https://github.com/tasnimulhasan873/b11a11-client-side-tasnimulhasan873" target="_blank">b11a11-client-side-tasnimulhasan873</a></li>
+    <li>🛠 <strong>Backend GitHub Repo:</strong> <a href="https://github.com/tasnimulhasan873/food-sharing-server" target="_blank">food-sharing-server</a></li>
+  </ul>
 
-💻 Frontend GitHub Repo: https://github.com/tasnimulhasan873/b11a11-client-side-tasnimulhasan873
+</body>
+</html>
 
-🛠 Backend GitHub Repo: https://github.com/tasnimulhasan873/food-sharing-server
 
 
