@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🍱 Food Sharing Website</title>
+
 
 </head>
 <body>
