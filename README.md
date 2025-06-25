@@ -46,11 +46,29 @@ A community-driven platform that helps reduce food waste by allowing users to sh
 "mongoose"
 "cors"
 "dotenv"
+---
+---
 
-##  Run Locally
-Cliend side: 
+## Run Locally
+Client side: 
 git clone https://github.com/your-username/food-sharing-client.git
 cd food-sharing-client
 npm install
 npm run dev
+
+Server:
+git clone https://github.com/your-username/food-sharing-server.git
+cd food-sharing-server
+npm install
+npm start
+
+---
+
+## 🔗 Relevant Links
+🔴 Live Website: https://foodsharing-34cc3.web.app
+
+💻 Frontend GitHub Repo: https://github.com/tasnimulhasan873/b11a11-client-side-tasnimulhasan873
+
+🛠 Backend GitHub Repo: https://github.com/tasnimulhasan873/food-sharing-server
+
 
