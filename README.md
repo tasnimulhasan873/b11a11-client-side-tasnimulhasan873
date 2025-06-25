@@ -3,39 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>🍱 Food Sharing Website</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
-      padding: 2rem;
-      background-color: #f9f9f9;
-      color: #333;
-    }
-    h1, h2 {
-      color: #2c3e50;
-    }
-    a {
-      color: #e74c3c;
-      text-decoration: none;
-    }
-    code {
-      background: #f4f4f4;
-      padding: 2px 6px;
-      border-radius: 4px;
-      font-family: Consolas, monospace;
-    }
-    pre {
-      background: #f4f4f4;
-      padding: 1rem;
-      overflow-x: auto;
-      border-radius: 5px;
-    }
-    hr {
-      border: none;
-      border-top: 2px solid #ccc;
-      margin: 2rem 0;
-    }
-  </style>
+
 </head>
 <body>
 
