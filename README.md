@@ -16,6 +16,8 @@
   <p>👉 <a href="https://foodsharing-34cc3.web.app/" target="_blank">Click here to visit the live site</a></p>
 
   <hr>
+   <h2>📸 Screenshot</h2>
+  <img src="./fs.png" alt="Garden Hub Screenshot" />
 
   <h2>🛠️ Tech Stack</h2>
   <ul>
